@@ -1,1 +1,1 @@
-rvm gemset use gnome
+rvm use system
