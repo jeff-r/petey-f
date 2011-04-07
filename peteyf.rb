@@ -51,29 +51,30 @@ class Viewer
     puts "Key event: #{keyval.inspect}"
     case keyval 
       when Gdk::Keyval::GDK_d then @window.decorated = (not @window.decorated)
-      when Gdk::Keyval::GDK_f then full_height 
-      when Gdk::Keyval::GDK_j then shift_down       
-      when Gdk::Keyval::GDK_k then shift_up       
-      when Gdk::Keyval::GDK_l then wider       
-      when Gdk::Keyval::GDK_m then goto_page   
-      when Gdk::Keyval::GDK_q then quit 
-      when Gdk::Keyval::GDK_r then render_current_page   
-      when Gdk::Keyval::GDK_s then toggle_fullscreen
+      when Gdk::Keyval::GDK_j      then shift_down       
+      when Gdk::Keyval::GDK_k      then shift_up       
+      when Gdk::Keyval::GDK_l      then wider       
+      when Gdk::Keyval::GDK_m      then goto_page   
+      when Gdk::Keyval::GDK_q      then quit 
+      when Gdk::Keyval::GDK_r      then render_current_page   
+      when Gdk::Keyval::GDK_f      then toggle_fullscreen
+      when Gdk::Keyval::GDK_F11    then toggle_fullscreen
+      when Gdk::Keyval::GDK_Right  then next_page   
+      when Gdk::Keyval::GDK_Left   then prev_page   
 
-      when Gdk::Keyval::GDK_z then zoom_in
-      when Gdk::Keyval::GDK_x then zoom_out
-      when Gdk::Keyval::GDK_comma then zoom_out
+      when Gdk::Keyval::GDK_z      then zoom_in
+      when Gdk::Keyval::GDK_x      then zoom_out
+      when Gdk::Keyval::GDK_comma  then zoom_out
       when Gdk::Keyval::GDK_period then zoom_in
-      when Gdk::Keyval::GDK_minus then zoom_out
-      when Gdk::Keyval::GDK_equal then zoom_in
+      when Gdk::Keyval::GDK_minus  then zoom_out
+      when Gdk::Keyval::GDK_equal  then zoom_in
 
-      when (state.control_mask? and Gdk::Keyval::GDK_Up)    then taller
-      when (state.control_mask? and Gdk::Keyval::GDK_Right) then wider 
-      when (state.control_mask? and Gdk::Keyval::GDK_Down)  then shorter
-      when (state.control_mask? and Gdk::Keyval::GDK_Left)  then thinner 
+      when (state.control_mask?    and Gdk::Keyval::GDK_Up)    then taller
+      when (state.control_mask?    and Gdk::Keyval::GDK_Right) then wider 
+      when (state.control_mask?    and Gdk::Keyval::GDK_Down)  then shorter
+      when (state.control_mask?    and Gdk::Keyval::GDK_Left)  then thinner 
+      # when Gdk::Keyval::GDK_f then full_height 
       # when Gdk::Keyval::GDK_Space then next_page   
-      when Gdk::Keyval::GDK_Right then next_page   
-      when Gdk::Keyval::GDK_Left  then prev_page   
     end
   end
 
