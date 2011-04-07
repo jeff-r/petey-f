@@ -26,6 +26,11 @@ class Viewer
     window.signal_connect('size_allocate') { 
     }
 
+    window.signal_connect('button_press_event') do |*args|
+      next_page
+    end
+    
+
     window.signal_connect('key_release_event') do |widget, event| 
       handle_key event.state, event.keyval
     end
@@ -50,6 +55,7 @@ class Viewer
   end
 
   def handle_key state, keyval
+    puts "keyval: #{keyval}"
     case keyval 
       when Gdk::Keyval::GDK_d then @window.decorated = (not @window.decorated)
       when Gdk::Keyval::GDK_j      then shift_down       
@@ -62,6 +68,7 @@ class Viewer
       when Gdk::Keyval::GDK_F11    then toggle_fullscreen
       when Gdk::Keyval::GDK_Right  then next_page   
       when Gdk::Keyval::GDK_Left   then prev_page   
+      when Gdk::Keyval::GDK_Pointer_Left  then next_page   
 
       when Gdk::Keyval::GDK_z      then zoom_in
       when Gdk::Keyval::GDK_x      then zoom_out
@@ -227,11 +234,20 @@ class Viewer
 
   def pack_pixbuf pixbuf
     @current_page_image = Gtk::Image.new(pixbuf)
-    @main_hbox.pack_start(@current_page_image, true, true, 0) 
+
+    # the eventbox is needed in order to pass 
+    # mouse press events to the @current_page_image object
+    @eventbox = Gtk::EventBox.new
+    @eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
+    @eventbox.add @current_page_image
+
+    @main_hbox.pack_start(@eventbox, true, true, 0) 
+    # @main_hbox.pack_start(@current_page_image, true, true, 0) 
   end
 
   def show
     @window.add(@main_hbox)
+    @eventbox.realize
     @window.show_all
     @not_loaded = false
     Gtk.main

@@ -45,7 +45,8 @@ Once in, use keys to move around:
     zoom in:  z or . or =
     zoom out: x or , or -
     full screen: f or F11
-    next page:   right arrow
+    next page:   right arrow or mouse click 
     prev page:   left arrow
+    
   
 
