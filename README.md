@@ -41,9 +41,9 @@ This will open book.pdf at page 30.
 
 Once in, use keys to move around:
 
-    quit:     q
-    zoom in:  z or . or =
-    zoom out: x or , or -
+    quit:        q
+    zoom in:     z or . or =
+    zoom out:    x or , or -
     full screen: f or F11
     next page:   right arrow or mouse click 
     prev page:   left arrow
