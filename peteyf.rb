@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# See https://github.com/Jeff-R/petey-f
+
 require 'gtk2'
 require 'poppler'
 
@@ -48,7 +50,6 @@ class Viewer
   end
 
   def handle_key state, keyval
-    puts "Key event: #{keyval.inspect}"
     case keyval 
       when Gdk::Keyval::GDK_d then @window.decorated = (not @window.decorated)
       when Gdk::Keyval::GDK_j      then shift_down       
@@ -84,6 +85,7 @@ class Viewer
     else
       @window.fullscreen
     end
+    render_current_page true
   end
 
   def quit
@@ -93,7 +95,6 @@ class Viewer
 
   def next_page
     @current_page_num += 1
-    puts "Num pages: #{@current_doc.n_pages}"
     if @current_page_num == @current_doc.n_pages
       @current_page_num = @current_doc.n_pages-1
     end
@@ -171,6 +172,7 @@ class Viewer
       @current_page_num = @current_doc.n_pages
     end
     @current_page = @current_doc.get_page(@current_page_num)
+
     page_w, page_h = @current_page.size
 
     page_w *= @current_scale
@@ -180,6 +182,7 @@ class Viewer
 
     rotation = 0
     @current_page.render(0,0, page_w, page_h, @current_scale, rotation, pixbuf)
+
     pixbuf
   end
 
@@ -197,26 +200,24 @@ class Viewer
     end
   end
 
-  def render_current_page
+  def render_current_page fullscreen = false
     if @not_loaded
       return
     end
     @current_page = @current_doc.get_page(@current_page_num)
-    w = @window.allocation.width
-    h = @window.allocation.height
+    if fullscreen 
+      w = @window.screen.width
+      h = @window.screen.height
+    else
+      w = @window.allocation.width
+      h = @window.allocation.height
+    end
     @current_scale = get_doc_scale w, h
   
     rotation = 0
 
-    # @zoom = 1.2
-    # then center the pdf
     doc_w, doc_h = @current_page.size
     scale = @current_scale * @zoom
-    # scale = 1
-    puts "w = #{w}, doc_w = #{doc_w}, scale = #{scale}"
-    x = (w - scale*doc_w) / 2
-    y = -(h - scale*doc_h) / 2
-    puts "x,y : #{x}, #{y}"
 	  pixbuf = Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, false, 8, w, h)
     pixbuf.fill! 0x00000000
     @current_page.render(@x, @y, scale*doc_w, scale*doc_h, scale, rotation, pixbuf)
@@ -239,6 +240,8 @@ class Viewer
 
   def show_pdf filename, page_num
     pack_pixbuf pixbuf_from_pdf(filename, page_num)
+
+    # render_current_page
   end
 
   def goto_page
